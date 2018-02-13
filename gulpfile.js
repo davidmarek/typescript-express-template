@@ -1,9 +1,17 @@
 var gulp = require("gulp");
 var ts = require("gulp-typescript");
 var sourcemaps = require('gulp-sourcemaps');
+var tslint = require("gulp-tslint");
+
 var tsProject = ts.createProject("tsconfig.json");
 
-gulp.task('compileTypescript', function() {
+gulp.task('tslint', function() {
+  return tsProject.src()
+    .pipe(tslint({ formatter: "stylish" }))
+    .pipe(tslint.report({ emitError: false }));
+})
+
+gulp.task('compileTypescript', ['tslint'], function() {
   return tsProject.src()
     .pipe(sourcemaps.init())
     .pipe(tsProject())
