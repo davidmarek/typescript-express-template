@@ -2,6 +2,7 @@ var gulp = require("gulp");
 var ts = require("gulp-typescript");
 var sourcemaps = require('gulp-sourcemaps');
 var tslint = require("gulp-tslint");
+var nodemon = require("gulp-nodemon");
 
 var tsProject = ts.createProject("tsconfig.json");
 
@@ -19,6 +20,13 @@ gulp.task('compileTypescript', ['tslint'], function() {
     .pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: './' }))
     .pipe(gulp.dest("dist"));
 })
+
+gulp.task('serve', ['watch'], function() {
+  return nodemon({
+    script: 'dist/server.js',
+    watch: ['dist']
+  });
+});
 
 gulp.task('watch', ['compileTypescript'], function() {
   gulp.watch(tsProject.config.include, ['compileTypescript']);
